@@ -15,16 +15,16 @@ RUN apt-get -qqy install \
     ca-certificates \
     curl \
     software-properties-common
+
 RUN curl -sS -o - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
+
 RUN echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list
 RUN echo "deb http://archive.ubuntu.com/ubuntu xenial main universe\n" > /etc/apt/sources.list \
   && echo "deb http://archive.ubuntu.com/ubuntu xenial-updates main universe\n" >> /etc/apt/sources.list \
   && echo "deb http://security.ubuntu.com/ubuntu xenial-security main universe\n" >> /etc/apt/sources.list
 RUN apt-get -qqy update
 
-
 RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
-RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
 
 RUN apt-get -qqy --no-install-recommends install \
   nodejs \
@@ -36,8 +36,7 @@ RUN apt-get -qqy --no-install-recommends install \
   xfonts-100dpi \
   xfonts-75dpi \
   xfonts-scalable \
-  xfonts-cyrillic \
-  yarn
+  xfonts-cyrillic
 
 RUN export DISPLAY=:99.0
 RUN Xvfb :99 -shmem -screen 0 1366x768x16 &
@@ -46,6 +45,8 @@ WORKDIR /home/node
 ADD . .
 RUN chown node:node -R .
 RUN chmod 777 -R .
+
+RUN npm install -g yarn
 
 RUN google-chrome --version
 RUN firefox --version
